@@ -1,5 +1,6 @@
 package com.whrailway.sgsp.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.RuntimeService;
@@ -30,6 +31,7 @@ public class FinancialReportDemo {
     @Autowired
     private HistoryService historyService;
 
+    @ApiOperation("启动流程FinancialReport测试")
     @RequestMapping("/start")
     public void startFlow() {
 
