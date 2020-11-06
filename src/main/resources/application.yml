@@ -7,8 +7,11 @@ spring:
     local-cache-scope: statement
 
 flowable:
-  #¹Ø±Õ¶¨Ê±ÈÎÎñJOB
+  #å…³é—­å®šæ—¶ä»»åŠ¡JOB
   async-executor-activate: false
-  #  ½«databaseSchemaUpdateÉèÖÃÎªtrue¡£µ±Flowable·¢ÏÖ¿âÓëÊı¾İ¿â±í½á¹¹²»Ò»ÖÂÊ±£¬»á×Ô¶¯½«Êı¾İ¿â±í½á¹¹Éı¼¶ÖÁĞÂ°æ±¾¡£
-  #  database-schema-updateÉèÖÃÎªtrue£¬µ±Êı¾İ¿âÖĞ±í½á¹¹²»´æÔÚÊ±£¬»á×Ô¶¯´´½¨±í½á¹¹
+  #  å°†databaseSchemaUpdateè®¾ç½®ä¸ºtrueã€‚å½“Flowableå‘ç°åº“ä¸æ•°æ®åº“è¡¨ç»“æ„ä¸ä¸€è‡´æ—¶ï¼Œä¼šè‡ªåŠ¨å°†æ•°æ®åº“è¡¨ç»“æ„å‡çº§è‡³æ–°ç‰ˆæœ¬ã€‚
+  #  database-schema-updateè®¾ç½®ä¸ºtrueï¼Œå½“æ•°æ®åº“ä¸­è¡¨ç»“æ„ä¸å­˜åœ¨æ—¶ï¼Œä¼šè‡ªåŠ¨åˆ›å»ºè¡¨ç»“æ„
   database-schema-update: true
+
+server:
+  port: 8888
