@@ -1,6 +1,7 @@
 package com.whrailway.sgsp.controller;
 
 import com.whrailway.sgsp.utils.R;
+import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.jni.Proc;
 import org.flowable.engine.ProcessEngine;
 import org.flowable.engine.RuntimeService;
@@ -10,11 +11,9 @@ import org.flowable.spring.ProcessEngineFactoryBean;
 import org.flowable.task.api.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -95,4 +94,45 @@ public class FlowableControllerDemo {
         return R.ok();
     }
 
+    @RequestMapping("/test")
+    public R test(){
+        ProcessInstance processInstance =
+                runtimeService.startProcessInstanceByKey("Test");
+        List<Task> tasks = taskService.createTaskQuery().taskAssignee("testuser").list();
+        return R.ok(tasks.toString());
+
+    }
+
+    @ApiOperation("flowable并行会签测试，超过一半则通过")
+    @RequestMapping(value = "/livingtest", method = RequestMethod.GET)
+    public void living(){
+        HashMap<String, Object> map = new HashMap<>();
+        //定义的人员列表4人
+        String[] v = { "user1", "user2", "user3", "user4" };
+        map.put("assigneeList", Arrays.asList(v));
+        ProcessInstance pi = runtimeService.startProcessInstanceByKey("living",map);
+
+        List<Task> list = taskService.createTaskQuery().processInstanceId(pi.getId()).list();
+        System.out.println("--------创建4个并行任务---------------");
+        int  i=0;
+
+        for (Task task : list) {
+            i=i+1;
+            System.out.println("============ i ="+i);
+            System.out.println("================== 节点name is =  "+task.getName());
+            System.out.println("================== 办理人assginee is = " + task.getAssignee());
+            System.out.println("================== 节点id is =  "+task.getId());
+            //变相判断已经二人提交 之后人员不提交
+            if (i<3) {
+                System.out.println("================== 提交 节点 id is="+task.getId());
+                taskService.complete(task.getId());
+            }
+        }
+        //判断值为 50% 所以提交人达到2人 会签节点即可通过
+        Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).singleResult();
+        System.out.println("====================================================================================");
+        //验证是否已通过
+        System.out.println("===================task id is="+task.getId());
+        System.out.println("===================task name is="+task.getName());
+    }
 }
